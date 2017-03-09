@@ -38,7 +38,7 @@
     margin: 2em auto;
     width: 500px;
     overflow: hidden;
-    margin-top: 130px;
+    margin-top: 200px;
 }
 
 #slider-wrapper {
@@ -134,6 +134,19 @@
     height:100%;
     margin: 0 auto;
     background-color: #f6f6f6;
+}
+table, td, th {    
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+   
+}
+
+th, td {
+    padding: 15px;
 }
 </style>
 <body onLoad="loadXMLDoc();">
@@ -251,7 +264,7 @@ geocoder.addr2coord('서울특별시 마포구 아현동 437-3', function(status
             if (this.readyState == 4 && this.status == 200) {
                 var items = JSON.parse(this.responseText);
                 console.log(items.datas[0].address1);
-                document.getElementById("td_img").innerHTML ="<img src=\"" + items.datas[0].img + "\" style='width:200px;height:200px;'>";
+                document.getElementById("td_img").innerHTML ="<img src=\"" + items.datas[0].img + "\" style='width:300px;height:250px;'>";
                 document.getElementById("td_address").innerHTML ="<p><strong>" + items.datas[0].name + "</strong></p><p>" + items.datas[0].address1 +items.datas[0].address2+items.datas[0].address3+ "</p>";
                 document.getElementById("td_information").innerHTML ="<p>"+ items.datas[0].floor + "</p><p>" + items.datas[0].rooms+"</p><p>" +items.datas[0].established+"</p>";
             }
