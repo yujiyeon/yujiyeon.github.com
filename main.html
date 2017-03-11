@@ -223,7 +223,7 @@
             if (this.readyState == 4 && this.status == 200) {
                 var items = JSON.parse(this.responseText);
                 console.log(items.datas[0].address1);
-                document.getElementById("td_img").innerHTML ="<amp-img src=\"" + items.datas[0].img + "\" style='width:200px;height:200px;'></amp-img>";
+                document.getElementById("td_img").innerHTML ="<img src=\"" + items.datas[0].img + "\" style='width:200px;height:200px;'>";
                 document.getElementById("td_address").innerHTML ="<p><strong>" + items.datas[0].name + "</strong></p><p>" + items.datas[0].address1 +items.datas[0].address2+items.datas[0].address3+ "</p>";
                 document.getElementById("td_information").innerHTML ="<p>"+ items.datas[0].floor + "</p><p>" + items.datas[0].rooms+"</p><p>" +items.datas[0].established+"</p>";
             }
