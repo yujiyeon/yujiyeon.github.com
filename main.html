@@ -1,153 +1,209 @@
 <!DOCTYPE html>
+<!--
+1. jQuery 등 플러그인을 사용하지 않고 스크립트 구현 O
+2. 건물정보 영역은 제공된  items.json을 가지고 데이터 삽입 구현 O
+3. 문의하기는 똑같은 이미지를 띄워 이미지를 클릭하게 되면 전화걸기가 되도록 구현하였습니다.
+4. html validation체크
+5. amp를 이용하여 구현
+6. 첫 화면에 크게 뜨는 매물사진을 클릭하게 되면 모달창이 뜨게됩니다.
+7. 다음 map api를 사용하여 json파일 내에 있는 건물의 위치가 표시되도록 구현하였습니다.
+8. 이미지슬라이드는 사진 밑 숫자 버튼을 클릭하게되면 슬라이드되도록 구현하였습니다.
+-->
 <html>
 <head>
-	<title>zigbang</title>
-	<script async src="https://cdn.ampproject.org/v0.js"></script>
-	<script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=1798d81ed8bf451ec89609d9ab17f970"></script>
+    <title>zigbang</title>
+
+    <script type="text/javascript"
+            src="//apis.daum.net/maps/maps3.js?apikey=1798d81ed8bf451ec89609d9ab17f970&libraries=services"></script>
 </head>
 <style>
-.white_content {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.8);
-    opacity:0;
-    -webkit-transition: opacity 400ms ease-in;
-    -moz-transition: opacity 400ms ease-in;
-    transition: opacity 400ms ease-in;
-    pointer-events: none;
-}
-.white_content:target {
-    opacity:1;
-    pointer-events: auto;
-}
-.white_content > div {
-  position: absolute;
-  top: 25%;
-  left: 25%;
-  width: 50%;
-  height: 50%;
-  
- 
-  overflow: auto; 
-}
+    .white_content {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.8);
+        opacity: 0;
+        -webkit-transition: opacity 400ms ease-in;
+        -moz-transition: opacity 400ms ease-in;
+        transition: opacity 400ms ease-in;
+        pointer-events: none;
+    }
 
-#slider {
-    margin: 2em auto;
-    width: 960px;
-    overflow: hidden;
-    margin-top: 130px;
-}
+    .white_content:target {
+        opacity: 1;
+        pointer-events: auto;
+    }
 
-#slider-wrapper {
-    width: 9999px;
-    height: 300px;
-    position: relative;
-    transition: left 400ms linear;
-}
+    .white_content > div {
+        position: absolute;
+        top: 25%;
+        left: 25%;
+        width: 50%;
+        height: 50%;
 
-.slide {
-    float: left;
-    width: 960px;
-    height: 300px;
-    position: relative;
-    overflow: hidden;
-}
+        overflow: auto;
+    }
 
-.slide amp-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
+    #slider {
+        margin: 2em auto;
+        width: 500px;
+        overflow: hidden;
+        margin-top: 200px;
+    }
 
-.caption {
-    margin: 0;
-    position: absolute;
-    z-index: 100;
-    bottom: -2em;
-    left: 0;
-    width: 100%;
-    height: 2em;
-    line-height: 2;
-    text-align: center;
-    background: rgba( 0, 0, 0, 0.6 );
-    color: #fff;
-    transition: bottom 500ms ease-in;
-}
-.caption.visible {
-    bottom: 0;
-}
+    #slider-wrapper {
+        width: 9999px;
+        height: 300px;
+        position: relative;
+        transition: left 400ms linear;
+    }
 
-#slider-nav {
-    margin: 1em 0;
-    text-align: center;
-}
+    .slide {
+        float: left;
+        width: 960px;
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+    }
 
-#slider-nav a {
-    width: 2em;
-    height: 2em;
-    border: 1px solid #ccc;
-    text-align: center;
-    text-decoration: none;
-    color: #000;
-    display: inline-block;
-    line-height: 2;
-    margin-right: 0.5em;
-}
+    .slide img {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 
-#slider-nav a.current {
-    border-color: #000;
-}
-#top{
-    background-color:#FEA407;
-    height: 110px;
-    width: 100%;
-}
-#modal{
-    width:100px;
-    height:150px;
-}
-#img{
-    width:100%;
-    height:100px;
-    margin-top:110px;
-}
-#json{
-    width:100%;
-    height:150px;
-    margin-top:250px;
+    .caption {
+        margin: 0;
+        position: absolute;
+        z-index: 100;
+        bottom: -2em;
+        left: 0;
+        width: 100%;
+        height: 2em;
+        line-height: 2;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        transition: bottom 500ms ease-in;
+    }
 
-}
-#map{
-    width:100%;
-    height:350px;
-    margin-top:0px;
-}
-#map_section{
+    .caption.visible {
+        bottom: 0;
+    }
 
-    margin-top:0px;
-}
-#page{
-    width:500px;
-    height:100%;
-    margin: 0 auto;
-    background-color: #f6f6f6;
-}
+    #slider-nav {
+        margin: 1em 0;
+        text-align: center;
+    }
+
+    #slider-nav a {
+        width: 2em;
+        height: 2em;
+        border: 1px solid #ccc;
+        text-align: center;
+        text-decoration: none;
+        color: #000;
+        display: inline-block;
+        line-height: 2;
+        margin-right: 0.5em;
+    }
+
+    #slider-nav a.current {
+        border-color: #000;
+    }
+
+    #top {
+        background-color: #FEA407;
+        height: 110px;
+        width: 100%;
+    }
+
+    #modal {
+        width: 100px;
+        height: 150px;
+    }
+
+    #img {
+        width: 100%;
+        height: 100px;
+        margin-top: 110px;
+    }
+
+    #json {
+        width: 100%;
+        height: 150px;
+    }
+
+    #map {
+        width: 100%;
+        height: 350px;
+        margin-top: 0px;
+    }
+
+    #map_section {
+        margin-top: 0px;
+    }
+
+    #page {
+        width: 500px;
+        height: 100%;
+        margin: 0 auto;
+        background-color: #f6f6f6;
+    }
+
+    #etc {
+        margin-top: 260px;
+    }
+
+    table, td, th {
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    table {
+        border-collapse: collapse;
+
+    }
+
+    th, td {
+        padding: 15px;
+    }
 </style>
 <body onLoad="loadXMLDoc();">
 <div id="page">
-	<div id ="top"></div>
+    <div id="top"></div>
 
 
     <div id="modal">
-        <a href="#open"><amp-img src="https://zigbang.s3-ap-northeast-1.amazonaws.com/public/buildings/18304.jpg" style="width:500px;height:400px;"></amp-img>
-        <div class="white_content" id="open">
-            <div>
-                <a href="#close"><amp-img src="https://zigbang.s3-ap-northeast-1.amazonaws.com/public/buildings/18304.jpg"></amp-img></a>
+        <a href="#open"><img src="https://zigbang.s3-ap-northeast-1.amazonaws.com/public/buildings/18304.jpg"
+                             style="width:500px;height:400px;">
+            <div class="white_content" id="open">
+                <div>
+                    <a href="#close"><img
+                            src="https://zigbang.s3-ap-northeast-1.amazonaws.com/public/buildings/18304.jpg"></a>
+                </div>
             </div>
-        </div>
+    </div>
+    <div id="etc">
+        <h3>상세설명</h3>
+        <table id="etc_table" border="1" width="500px" bgcolor="white">
+            <tr>
+                <td><p>거실과 방이 크게 나온 신사동 3룸 입니다 ^^<br>
+                    남향집이고 해가 너무 잘들고 근처 건물들에 비해서 집이 깨끗하고 뷰도 좋은 편입니다.<br>가격은 집주인 분과 상의 후에 조정 가능합니다!!<br>깔끔하고 좋은 집 보러
+                    연락주세요!</p></td>
+            </tr>
+        </table>
+        <h3>담당자 한마디</h3>
+        <table id="etc_table" border="1" width="500px" bgcolor="white">
+            <tr>
+                <td><p>공휴일 및 주말에도 언제든지 상담 가능<br>
+                    차량 픽업 서비스 가능<br>
+                    조건에 맞는 집 답사<br>
+                    상담부터 계약까지 고객 맞춤형 서비스</td>
+            </tr>
+        </table>
     </div>
 
     <div id="json">
@@ -162,142 +218,176 @@
             </tr>
         </table>
     </div>
-
-
     <div id="slider">
-    <div id="slider-wrapper">
-        <div class="slide">
-            <amp-img src="./images/academy.jpg" alt=""></amp-img>
-            <p class="caption">Caption 1</p>
+        <div id="slider-wrapper">
+            <div class="slide">
+                <img src="./images/academy.jpg" alt=""/>
+                <p class="caption">Caption 1</p>
+            </div>
+            <div class="slide">
+                <img src="./images/academy2.jpg" alt=""/>
+                <p class="caption">Caption 2</p>
+            </div>
+            <div class="slide">
+                <img src="./images/academy3.jpg" alt=""/>
+                <p class="caption">Caption 3</p>
+            </div>
+            <div class="slide">
+                <img src="./images/academy4.jpg" alt=""/>
+                <p class="caption">Caption 4</p>
+            </div>
+            <div class="slide">
+                <img src="./images/academy5.jpg" alt=""/>
+                <p class="caption">Caption 5</p>
+            </div>
         </div>
-        <div class="slide">
-            <amp-img src="./images/academy2.jpg" alt=""></amp-img>
-            <p class="caption">Caption 2</p>
-        </div>
-        <div class="slide">
-            <amp-img src="./images/academy3.jpg" alt=""></amp-img>
-            <p class="caption">Caption 3</p>
-        </div>
-        <div class="slide">
-            <amp-img src="./images/academy4.jpg" alt=""></amp-img>
-            <p class="caption">Caption 4</p>
-        </div>
-        <div class="slide">
-            <amp-img src="./images/academy5.jpg" alt=""></amp-img>
-            <p class="caption">Caption 5</p>
+        <div id="slider-nav">
+            <a href="#" data-slide="0">1</a>
+            <a href="#" data-slide="1">2</a>
+            <a href="#" data-slide="2">3</a>
+            <a href="#" data-slide="3">4</a>
+            <a href="#" data-slide="4">5</a>
         </div>
     </div>
-    <div id="slider-nav">
-        <a href="#" data-slide="0">1</a>
-        <a href="#" data-slide="1">2</a>
-        <a href="#" data-slide="2">3</a>
-        <a href="#" data-slide="3">4</a>
-        <a href="#" data-slide="4">5</a>
-    </div>
-</div>
 
     <div id="map_section">
         <h3>위치보기</h3>
         <div id="map"></div>
     </div>
 
-    <div id="call_section">
-        <a href="tel:+900300400"><amp-img src="./call.png"></amp-img></a>
+    <div id="etc2">
+        <h3>중개사정보</h3>
+        <table id="etc_table" border="1px" width="500px" bgcolor="white">
+            <tr>
+                <td width="100px"><img src="./images/capture.jpg"></td>
+                <td><p><strong>대표공인중개사 (유지연)</strong><br>
+                    yujiyeon26@naver.com<br>
+                    010-8109-7229</p>
+            </tr>
+            <tr>
+                <td colspan="2"><p><strong>중개사무소 정보</strong><br>
+                    <ul>
+                        <li>서울시 마포구, 테리 부동산 (김테리)</li>
+                        <li>대표번호:1588-1688</li>
+                    </ul>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table id="etc_table" border="1px" width="500px" bgcolor="gray">
+            <tr>
+                <td><p style="color:white;">이 방은 공인중개사가 등록한 중개 매물입니다.<br>
+                    공인중개사를 통해 안전하게 계약할 수 있으며, 법정 중개 보수가 발생합니다.</p></td>
+            </tr>
+        </table>
+
     </div>
-    
-<script>
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	    mapOption = { 
-	        center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-	        level: 3 // 지도의 확대 레벨
-	    };
 
-	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-	var map = new daum.maps.Map(mapContainer, mapOption); 
+    <div id="call_section">
+        <table id="etc_table" border="1px" width="500px" bgcolor="white">
+            <tr>
+                <td><p style="color:gray;">지원자(유지연)
+                    <p>
+                    <p style="color:orange;">010-8109-7229</p></td>
+                <td width="100px"><a href="tel:+01082849025"><img src="./call.png"></a></td>
+            </tr>
+        </table>
+    </div>
 
-  function loadXMLDoc() {
-     
-        var xmlhttp = new XMLHttpRequest();
-        var url = "./items.json";
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var items = JSON.parse(this.responseText);
-                console.log(items.datas[0].address1);
-                document.getElementById("td_img").innerHTML ="<amp-img src=\"" + items.datas[0].img + "\" style='width:200px;height:200px;'></amp-img>";
-                document.getElementById("td_address").innerHTML ="<p><strong>" + items.datas[0].name + "</strong></p><p>" + items.datas[0].address1 +items.datas[0].address2+items.datas[0].address3+ "</p>";
-                document.getElementById("td_information").innerHTML ="<p>"+ items.datas[0].floor + "</p><p>" + items.datas[0].rooms+"</p><p>" +items.datas[0].established+"</p>";
+    <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = {
+                center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+        // 지도를 생성합니다    
+        var map = new daum.maps.Map(mapContainer, mapOption);
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new daum.maps.services.Geocoder();
+        // 주소로 좌표를 검색합니다
+        geocoder.addr2coord('서울특별시 마포구 아현동 437-3', function (status, result) {
+            // 정상적으로 검색이 완료됐으면 
+            if(status === daum.maps.services.Status.OK) {
+                var coords = new daum.maps.LatLng(result.addr[0].lat, result.addr[0].lng);
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new daum.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                var infowindow = new daum.maps.InfoWindow({
+                    content: '<div style="width:150px;text-align:center;padding:6px 0;">고려아카데미텔</div>'
+                });
+                infowindow.open(map, marker);
+                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                map.setCenter(coords);
+            }
+        });
+        function loadXMLDoc() {
+
+            var xmlhttp = new XMLHttpRequest();
+            var url = "./items.json";
+            xmlhttp.onreadystatechange = function () {
+                if(this.readyState == 4 && this.status == 200) {
+                    var items = JSON.parse(this.responseText);
+                    console.log(items.datas[0].address1);
+                    document.getElementById("td_img").innerHTML = "<img src=\"" + items.datas[0].img + "\" style='width:300px;height:250px;'>";
+                    document.getElementById("td_address").innerHTML = "<p><strong>" + items.datas[0].name + "</strong></p><p>" + items.datas[0].address1 + items.datas[0].address2 + items.datas[0].address3 + "</p>";
+                    document.getElementById("td_information").innerHTML = "<p>" + items.datas[0].floor + "</p><p>" + items.datas[0].rooms + "</p><p>" + items.datas[0].established + "</p>";
+                }
+            };
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        }
+        function Slider(element) {
+            this.el = document.querySelector(element);
+            this.init();
+        }
+        Slider.prototype = {
+            init: function () {
+                this.links = this.el.querySelectorAll("#slider-nav a");
+                this.wrapper = this.el.querySelector("#slider-wrapper");
+                this.navigate();
+            },
+            navigate: function () {
+
+                for(var i = 0; i < this.links.length; ++i) {
+                    var link = this.links[i];
+                    this.slide(link);
+                }
+            },
+
+            slide: function (element) {
+                var self = this;
+                element.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    var a = this;
+                    self.setCurrentLink(a);
+                    var index = parseInt(a.getAttribute("data-slide"), 10) + 1;
+                    var currentSlide = self.el.querySelector(".slide:nth-child(" + index + ")");
+
+                    self.wrapper.style.left = "-" + currentSlide.offsetLeft + "px";
+                }, false);
+            },
+            setCurrentLink: function (link) {
+                var parent = link.parentNode;
+                var a = parent.querySelectorAll("a");
+
+                link.className = "current";
+
+                for(var j = 0; j < a.length; ++j) {
+                    var cur = a[j];
+                    if(cur !== link) {
+                        cur.className = "";
+                    }
+                }
             }
         };
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-}
+        document.addEventListener("DOMContentLoaded", function () {
+            var aSlider = new Slider("#slider");
 
-function Slider( element ) {
-    this.el = document.querySelector( element );
-    this.init();
-}   
-
-Slider.prototype = {
-    init: function() {
-        this.links = this.el.querySelectorAll( "#slider-nav a" );
-        this.wrapper = this.el.querySelector( "#slider-wrapper" );
-        this.navigate();
-    },
-    navigate: function() {
-    
-        for( var i = 0; i < this.links.length; ++i ) {
-            var link = this.links[i];
-            this.slide( link ); 
-        }
-    },
-    
-    animate: function( slide ) {
-        var parent = slide.parentNode;
-        var caption = slide.querySelector( ".caption" );
-        var captions = parent.querySelectorAll( ".caption" );
-        for( var k = 0; k < captions.length; ++k ) {
-            var cap = captions[k];
-            if( cap !== caption ) {
-                cap.classList.remove( "visible" );
-            }
-        }
-        caption.classList.add( "visible" ); 
-    },
-    
-    slide: function( element ) {
-        var self = this;
-        element.addEventListener( "click", function( e ) {
-            e.preventDefault();
-            var a = this;
-            self.setCurrentLink( a );
-            var index = parseInt( a.getAttribute( "data-slide" ), 10 ) + 1;
-            var currentSlide = self.el.querySelector( ".slide:nth-child(" + index + ")" );
-            
-            self.wrapper.style.left = "-" + currentSlide.offsetLeft + "px";
-            self.animate( currentSlide );
-            
-        }, false);
-    },
-    setCurrentLink: function( link ) {
-        var parent = link.parentNode;
-        var a = parent.querySelectorAll( "a" );
-        
-        link.className = "current";
-        
-        for( var j = 0; j < a.length; ++j ) {
-            var cur = a[j];
-            if( cur !== link ) {
-                cur.className = "";
-            }
-        }
-    }   
-};
-
-document.addEventListener( "DOMContentLoaded", function() {
-    var aSlider = new Slider( "#slider" );
-    
-});
-</script>
+        });
+    </script>
 </div>
 </body>
 </html>
