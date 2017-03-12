@@ -16,11 +16,168 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1">
     <link rel="canonical" href="./main.html" />
-    <link rel="stylesheet" type="text/css" href="./css/index.css"/>
     <script type="text/javascript"
             src="//apis.daum.net/maps/maps3.js?apikey=1798d81ed8bf451ec89609d9ab17f970&libraries=services"></script>
     <script async src="https://cdn.ampproject.org/v0.js"></script>
     <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    <style amp-custom>
+        .white_content {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            -webkit-transition: opacity 400ms ease-in;
+            -moz-transition: opacity 400ms ease-in;
+            transition: opacity 400ms ease-in;
+            pointer-events: none;
+        }
+
+        .white_content:target {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .white_content > div {
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            width: 50%;
+            height: 50%;
+
+            overflow: auto;
+        }
+
+        #slider {
+            margin: 2em auto;
+            width: 500px;
+            overflow: hidden;
+            margin-top: 200px;
+        }
+
+        #slider-wrapper {
+            width: 9999px;
+            height: 300px;
+            position: relative;
+            transition: left 400ms linear;
+        }
+
+        .slide {
+            float: left;
+            width: 960px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .caption {
+            margin: 0;
+            position: absolute;
+            z-index: 100;
+            bottom: -2em;
+            left: 0;
+            width: 100%;
+            height: 2em;
+            line-height: 2;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            transition: bottom 500ms ease-in;
+        }
+
+        .caption.visible {
+            bottom: 0;
+        }
+
+        #slider-nav {
+            margin: 1em 0;
+            text-align: center;
+        }
+
+        #slider-nav a {
+            width: 2em;
+            height: 2em;
+            border: 1px solid #ccc;
+            text-align: center;
+            text-decoration: none;
+            color: #000;
+            display: inline-block;
+            line-height: 2;
+            margin-right: 0.5em;
+        }
+
+        #slider-nav a.current {
+            border-color: #000;
+        }
+
+        #top {
+            background-color: #FEA407;
+            height: 110px;
+            width: 100%;
+        }
+
+        #modal {
+            width: 100px;
+            height: 150px;
+        }
+
+        #img {
+            width: 100%;
+            height: 100px;
+            margin-top: 110px;
+        }
+
+        #json {
+            width: 100%;
+            height: 150px;
+        }
+
+        #map {
+            width: 100%;
+            height: 350px;
+            margin-top: 0px;
+        }
+
+        #map_section {
+            margin-top: 0px;
+        }
+
+        #page {
+            width: 500px;
+            height: 100%;
+            margin: 0 auto;
+            background-color: #f6f6f6;
+        }
+
+        #etc {
+            margin-top: 260px;
+        }
+
+        table, td, th {
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+
+        }
+
+        th, td {
+            padding: 15px;
+        }
+        .info{
+            color:white;
+        }
+        .agent-gray{
+            color:gray;
+        }
+        .agent-tell{
+            color:orange;
+        }
+</style>
 </head>
 
 <body>
